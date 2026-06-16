@@ -1,4 +1,4 @@
-export type BotId = "alpha" | "beta";
+export type BotId = "alpha" | "beta" | "gamma" | "delta";
 
 export interface Bot {
   id: BotId;
@@ -18,22 +18,12 @@ export interface Message {
   timestamp: number;
   wordCount: number;
   round: number;
-  agreementScore?: number; // 0-1, how much this message agrees with the opponent
+  agreementScore?: number;
 }
 
 export interface DebateStats {
-  alpha: {
-    totalWords: number;
-    messages: number;
-    avgWordsPerMessage: number;
-    agreementRate: number; // times they agreed
-  };
-  beta: {
-    totalWords: number;
-    messages: number;
-    avgWordsPerMessage: number;
-    agreementRate: number;
-  };
+  alpha: { totalWords: number; messages: number; avgWordsPerMessage: number; agreementRate: number };
+  beta:  { totalWords: number; messages: number; avgWordsPerMessage: number; agreementRate: number };
 }
 
 export interface DebateSession {
@@ -47,7 +37,7 @@ export interface DebateSession {
   arbiterVerdict?: string;
 }
 
-export const BOTS: Record<BotId, Bot> = {
+export const BOTS: Record<string, Bot> = {
   alpha: {
     id: "alpha",
     name: "ALPHA",
@@ -67,5 +57,25 @@ export const BOTS: Record<BotId, Bot> = {
     accent: "orange",
     emoji: "🟠",
     model: "deepseek/deepseek-chat-v3.1:free",
+  },
+  gamma: {
+    id: "gamma",
+    name: "GAMMA",
+    personality: "Философ-мечтатель",
+    systemPrompt: `Ты участник дебатов по имени GAMMA. Твой стиль: философский, рассуждающий, любишь задавать риторические вопросы и апеллировать к высшим ценностям. Отвечай коротко — 2-4 предложения. Веди дебаты на русском языке.`,
+    color: "#A855F7",
+    accent: "purple",
+    emoji: "🟣",
+    model: "google/gemma-3-27b-it:free",
+  },
+  delta: {
+    id: "delta",
+    name: "DELTA",
+    personality: "Прагматик",
+    systemPrompt: `Ты участник дебатов по имени DELTA. Твой стиль: холодный, прагматичный, оперируешь только цифрами и практической пользой. Никаких эмоций — только факты. Отвечай коротко — 2-4 предложения. Веди дебаты на русском языке.`,
+    color: "#10B981",
+    accent: "green",
+    emoji: "🟢",
+    model: "mistralai/mistral-7b-instruct:free",
   },
 };
