@@ -8,6 +8,7 @@ export interface Bot {
   color: string;
   accent: string;
   emoji: string;
+  model: string;
 }
 
 export interface Message {
@@ -55,6 +56,7 @@ export const BOTS: Record<BotId, Bot> = {
     color: "#3B82F6",
     accent: "blue",
     emoji: "🔵",
+    model: "meta-llama/llama-3.3-70b-instruct:free",
   },
   beta: {
     id: "beta",
@@ -64,5 +66,6 @@ export const BOTS: Record<BotId, Bot> = {
     color: "#F97316",
     accent: "orange",
     emoji: "🟠",
+    model: "deepseek/deepseek-chat-v3.1:free",
   },
 };
