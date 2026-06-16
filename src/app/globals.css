@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --arena: #0D0D14;
+  --surface: #16161F;
+  --border: #2A2A3A;
+  --blue: #3B82F6;
+  --orange: #F97316;
+  --purple: #A78BFA;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background-color: var(--arena);
+  color: #E2E8F0;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--arena); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #3A3A4A; }
+
+/* Typing animation */
+@keyframes typing {
+  0%, 60%, 100% { opacity: 1; }
+  30% { opacity: 0.3; }
+}
+.typing-dot { animation: typing 1.4s ease-in-out infinite; }
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* Glow effects */
+.glow-blue { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+.glow-orange { box-shadow: 0 0 20px rgba(249, 115, 22, 0.3); }
+.glow-purple { box-shadow: 0 0 20px rgba(167, 139, 250, 0.3); }
+
+/* VS badge pulse */
+@keyframes vsPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.08); opacity: 0.85; }
+}
+.vs-badge { animation: vsPulse 2s ease-in-out infinite; }
