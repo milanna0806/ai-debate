@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
 import { BOTS, BotId } from "@/lib/types";
-
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+import { generateReply, ChatMessage } from "@/lib/ai-providers";
 
 export async function POST(req: NextRequest) {
   try {
-    const { botId, topic, history } = await req.json() as {
+    const { botId, topic, history } = (await req.json()) as {
       botId: BotId;
       topic: string;
-      history: Array<{ role: "user" | "assistant"; content: string }>;
+      history: ChatMessage[];
     };
 
     const bot = BOTS[botId];
@@ -26,23 +24,23 @@ export async function POST(req: NextRequest) {
 - Не повторяй аргументы, которые уже использовал
 - Будь конкретным и убедительным`;
 
-    const messages = history.length > 0 ? history : [
-      { role: "user" as const, content: `Начни дебаты по теме: "${topic}". Выскажи свою начальную позицию.` }
-    ];
+    const messages: ChatMessage[] =
+      history.length > 0
+        ? history
+        : [
+            {
+              role: "user",
+              content: `Начни дебаты по теме: "${topic}". Выскажи свою начальную позицию.`,
+            },
+          ];
 
-    const response = await client.messages.create({
-      model: "claude-sonnet-4-6",
-      max_tokens: 300,
-      system: systemPrompt,
-      messages,
-    });
+    const text = await generateReply(bot.model, systemPrompt, messages, 300);
 
-    const text = response.content[0].type === "text" ? response.content[0].text : "";
     const wordCount = text.split(/\s+/).filter(Boolean).length;
 
     // Simple agreement detection
     const agreementWords = ["согласен", "согласна", "верно", "правильно", "действительно", "точно", "да,"];
-    const agreementScore = agreementWords.some(w => text.toLowerCase().includes(w)) ? 0.8 : 0.1;
+    const agreementScore = agreementWords.some((w) => text.toLowerCase().includes(w)) ? 0.8 : 0.1;
 
     return NextResponse.json({ text, wordCount, agreementScore });
   } catch (err) {
