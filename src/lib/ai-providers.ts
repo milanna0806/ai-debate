@@ -1,23 +1,23 @@
-import OpenAI from "openai";
+import Anthropic from "@anthropic-ai/sdk";
 
 export type ChatMessage = { role: "user" | "assistant"; content: string };
 
-// Both ALPHA and BETA talk through OpenRouter — one account, one key,
-// free models, no credit card and no Google Cloud service-account
-// nonsense. OpenRouter speaks the same API shape as OpenAI, just with
-// a different base URL.
-let client: OpenAI | null = null;
+let client: Anthropic | null = null;
+
 function getClient() {
   if (!client) {
-    if (!process.env.OPENROUTER_API_KEY) {
-      throw new Error("OPENROUTER_API_KEY is not set");
+    if (!process.env.ANTHROPIC_API_KEY) {
+      throw new Error("ANTHROPIC_API_KEY is not set");
     }
-    client = new OpenAI({
-      apiKey: process.env.OPENROUTER_API_KEY,
-      baseURL: "https://openrouter.ai/api/v1",
-    });
+    client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   }
   return client;
+}
+
+// Map OpenRouter model names → Anthropic model names
+function resolveModel(model: string): string {
+  // All bots use claude-haiku-4-5 — fast and cheap
+  return "claude-haiku-4-5";
 }
 
 export async function generateReply(
@@ -26,14 +26,15 @@ export async function generateReply(
   history: ChatMessage[],
   maxTokens = 300
 ): Promise<string> {
-  const completion = await getClient().chat.completions.create({
-    model,
+  const resolvedModel = resolveModel(model);
+
+  const response = await getClient().messages.create({
+    model: resolvedModel,
     max_tokens: maxTokens,
-    messages: [
-      { role: "system", content: systemPrompt },
-      ...history.map((m) => ({ role: m.role, content: m.content })),
-    ],
+    system: systemPrompt,
+    messages: history.map((m) => ({ role: m.role, content: m.content })),
   });
 
-  return completion.choices[0]?.message?.content?.trim() ?? "";
+  const block = response.content[0];
+  return block?.type === "text" ? block.text.trim() : "";
 }
