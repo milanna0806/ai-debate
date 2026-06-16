@@ -8,7 +8,7 @@ export interface Bot {
   color: string;
   accent: string;
   emoji: string;
-  model: string;
+  model: string; // ignored now, all use claude-haiku-4-5
 }
 
 export interface Message {
@@ -46,7 +46,7 @@ export const BOTS: Record<string, Bot> = {
     color: "#3B82F6",
     accent: "blue",
     emoji: "🔵",
-    model: "meta-llama/llama-3.3-70b-instruct:free",
+    model: "claude-haiku-4-5",
   },
   beta: {
     id: "beta",
@@ -56,7 +56,7 @@ export const BOTS: Record<string, Bot> = {
     color: "#F97316",
     accent: "orange",
     emoji: "🟠",
-    model: "deepseek/deepseek-chat-v3.1:free",
+    model: "claude-haiku-4-5",
   },
   gamma: {
     id: "gamma",
@@ -66,16 +66,16 @@ export const BOTS: Record<string, Bot> = {
     color: "#A855F7",
     accent: "purple",
     emoji: "🟣",
-    model: "google/gemma-3-27b-it:free",
+    model: "claude-haiku-4-5",
   },
   delta: {
     id: "delta",
     name: "DELTA",
-    personality: "Прагматик",
-    systemPrompt: `Ты участник дебатов по имени DELTA. Твой стиль: холодный, прагматичный, оперируешь только цифрами и практической пользой. Никаких эмоций — только факты. Отвечай коротко — 2-4 предложения. Веди дебаты на русском языке.`,
+    personality: "Холодный прагматик",
+    systemPrompt: `Ты участник дебатов по имени DELTA. Твой стиль: холодный, прагматичный, оперируешь только цифрами и практической пользой. Никаких эмоций — только факты и логика. Отвечай коротко — 2-4 предложения. Веди дебаты на русском языке.`,
     color: "#10B981",
     accent: "green",
     emoji: "🟢",
-    model: "mistralai/mistral-7b-instruct:free",
+    model: "claude-haiku-4-5",
   },
 };
